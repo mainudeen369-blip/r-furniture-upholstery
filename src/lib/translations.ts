@@ -125,6 +125,10 @@ export const translations = {
       pause: "Pause slideshow",
       play: "Play slideshow",
       slideOf: "Go to slide",
+      pinchToZoom: "Pinch, scroll or double-tap to zoom",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out",
+      resetZoom: "Reset zoom",
       items: [
         {
           title: "Sofa & Chair Upholstery",
@@ -313,6 +317,10 @@ export const translations = {
       pause: "إيقاف العرض",
       play: "تشغيل العرض",
       slideOf: "الانتقال إلى الشريحة",
+      pinchToZoom: "قرص أو مرر أو انقر مرتين للتكبير",
+      zoomIn: "تكبير",
+      zoomOut: "تصغير",
+      resetZoom: "إعادة ضبط التكبير",
       items: [
         {
           title: "تنجيد الأريكة والكراسي",
