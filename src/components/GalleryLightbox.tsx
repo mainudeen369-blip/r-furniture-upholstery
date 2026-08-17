@@ -15,7 +15,10 @@ export type GalleryItem = {
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
 
-function getTouchDistance(t1: Touch, t2: Touch) {
+function getTouchDistance(
+  t1: { clientX: number; clientY: number },
+  t2: { clientX: number; clientY: number },
+) {
   return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
 }
 
