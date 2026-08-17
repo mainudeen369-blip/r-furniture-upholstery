@@ -117,6 +117,14 @@ export const translations = {
     gallery: {
       title: "Our Craftsmanship",
       subtitle: "Transforming spaces across Dubai with elegance and comfort",
+      tapToExpand: "Tap to view fullscreen",
+      viewFullscreen: "View image fullscreen",
+      close: "Close gallery",
+      prev: "Previous image",
+      next: "Next image",
+      pause: "Pause slideshow",
+      play: "Play slideshow",
+      slideOf: "Go to slide",
       items: [
         {
           title: "Sofa & Chair Upholstery",
@@ -132,6 +140,26 @@ export const translations = {
           title: "House Furnishings",
           desc: "Curated furnishings for a beautiful life",
           image: "/images/furnishings.jpeg",
+        },
+        {
+          title: "Complete Upholstery Portfolio",
+          desc: "Sofa, headboard, dining, majlis, office & hotel furniture across Dubai",
+          image: "/images/Imga.jpeg",
+        },
+        {
+          title: "Before & After Transformations",
+          desc: "We give new life to worn sofas, chairs, headboards and office furniture",
+          image: "/images/imgb.jpeg",
+        },
+        {
+          title: "Craftsmanship in Action",
+          desc: "Premium fabric and leather restoration — worn out to like new",
+          image: "/images/imgc.jpeg",
+        },
+        {
+          title: "Dubai Premium Upholstery",
+          desc: "Home, office, hotel & restaurant furniture — serving all UAE",
+          image: "/images/imgd.jpeg",
         },
       ],
     },
@@ -277,6 +305,14 @@ export const translations = {
     gallery: {
       title: "حرفيتنا",
       subtitle: "تحويل المساحات في جميع أنحاء دبي بالأناقة والراحة",
+      tapToExpand: "اضغط للعرض بملء الشاشة",
+      viewFullscreen: "عرض الصورة بملء الشاشة",
+      close: "إغلاق المعرض",
+      prev: "الصورة السابقة",
+      next: "الصورة التالية",
+      pause: "إيقاف العرض",
+      play: "تشغيل العرض",
+      slideOf: "الانتقال إلى الشريحة",
       items: [
         {
           title: "تنجيد الأريكة والكراسي",
@@ -292,6 +328,26 @@ export const translations = {
           title: "مفروشات المنزل",
           desc: "مفروشات منتقاة لحياة جميلة",
           image: "/images/furnishings.jpeg",
+        },
+        {
+          title: "معرض أعمال التنجيد الشامل",
+          desc: "أريكة، لوح رأس، طعام، مجلس، مكتب وفندق في جميع أنحاء دبي",
+          image: "/images/Imga.jpeg",
+        },
+        {
+          title: "تحولات قبل وبعد",
+          desc: "نعيد الحياة للأرائك والكراسي ولوح الرأس وأثاث المكاتب البالي",
+          image: "/images/imgb.jpeg",
+        },
+        {
+          title: "الحرفية في العمل",
+          desc: "ترميم القماش والجلد الفاخر — من البالي إلى كالجديد",
+          image: "/images/imgc.jpeg",
+        },
+        {
+          title: "تنجيد فاخر في دبي",
+          desc: "أثاث المنزل والمكتب والفندق والمطعم — نخدم جميع الإمارات",
+          image: "/images/imgd.jpeg",
         },
       ],
     },
