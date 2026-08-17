@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     images: [
       {
-        url: "/images/hero-bg.jpg",
+        url: "/images/hero-img.jpeg",
         width: 1200,
         height: 630,
         alt: "R Furniture Upholstery Dubai — luxury furniture restoration",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME} Dubai`,
     description,
-    images: ["/images/hero-bg.jpg"],
+    images: ["/images/hero-img.jpeg"],
   },
   robots: {
     index: true,

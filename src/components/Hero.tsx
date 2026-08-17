@@ -49,7 +49,7 @@ export function Hero() {
         className="absolute inset-0 -top-[10%] h-[120%] w-full"
       >
         <Image
-          src="/images/hero-bg.jpg"
+          src="/images/hero-img.jpeg"
           alt="Luxury furniture upholstery workshop in Dubai with premium fabrics and golden lighting"
           fill
           priority
