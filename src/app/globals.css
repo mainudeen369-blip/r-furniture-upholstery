@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream-50 text-brown-900 antialiased;
+  }
+
+  ::selection {
+    @apply bg-gold-300/40 text-brown-900;
+  }
+}
+
+@layer components {
+  .gold-text {
+    @apply bg-gold-gradient bg-clip-text text-transparent;
+  }
+
+  .section-padding {
+    @apply px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24;
+  }
+
+  .container-site {
+    @apply mx-auto w-full max-w-site;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-6 py-3 text-sm font-semibold text-brown-900 shadow-gold transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 sm:px-8 sm:py-3.5 sm:text-base;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-gold-400 px-6 py-3 text-sm font-semibold text-brown-800 transition-all duration-300 hover:bg-gold-50 hover:scale-105 active:scale-95 sm:px-8 sm:py-3.5 sm:text-base;
+  }
+
+  .card-luxury {
+    @apply rounded-2xl border border-gold-200/50 bg-white/80 p-6 shadow-card backdrop-blur-sm transition-all duration-500 hover:border-gold-300 hover:shadow-gold;
+  }
+
+  .gold-ring {
+    @apply ring-4 ring-gold-300/60 ring-offset-4 ring-offset-cream-50;
+  }
+}
+
+@layer utilities {
+  .animate-in-view {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .animate-in-view.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+}
+
+/* RTL adjustments */
+[dir="rtl"] .flip-rtl {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .text-start-force {
+  text-align: right;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cream-200;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-gold-400;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gold-500;
+}
