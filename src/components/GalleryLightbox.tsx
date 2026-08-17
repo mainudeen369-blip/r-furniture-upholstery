@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
@@ -49,12 +49,7 @@ export function GalleryLightbox({ items, initialIndex, onClose }: GalleryLightbo
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, goNext, goPrev, dir]);
-
-  useEffect(() => {
-    const timer = setInterval(goNext, 5000);
-    return () => clearInterval(timer);
-  }, [goNext]);
+  }, [onClose, goNext, goPrev, dir, index]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     const threshold = 80;
@@ -80,8 +75,11 @@ export function GalleryLightbox({ items, initialIndex, onClose }: GalleryLightbo
       aria-modal="true"
       aria-label={item.title}
     >
-      {/* Header */}
-      <div className="flex shrink-0 items-center justify-between px-4 py-4 sm:px-6">
+      {/* Header — clicks don't close */}
+      <div
+        className="relative z-10 flex shrink-0 items-center justify-between px-4 py-4 sm:px-6"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="min-w-0 flex-1 pe-4">
           <h3 className="truncate font-display text-lg font-bold text-cream-50 sm:text-xl">
             {item.title}
@@ -103,11 +101,18 @@ export function GalleryLightbox({ items, initialIndex, onClose }: GalleryLightbo
         </div>
       </div>
 
-      {/* Main image */}
-      <div className="relative flex flex-1 items-center justify-center overflow-hidden px-4 pb-4 sm:px-16">
+      {/* Backdrop — click outside image closes */}
+      <div
+        className="relative flex flex-1 items-center justify-center overflow-hidden px-4 pb-4 sm:px-16"
+        onClick={() => onClose(index)}
+        role="presentation"
+      >
         <button
           type="button"
-          onClick={goPrev}
+          onClick={(e) => {
+            e.stopPropagation();
+            goPrev();
+          }}
           className="absolute start-2 z-20 rounded-full bg-white/10 p-2.5 text-cream-100 backdrop-blur-sm transition-all hover:scale-110 hover:bg-gold-500/30 sm:start-4 sm:p-3"
           aria-label={t.gallery.prev}
         >
@@ -127,7 +132,8 @@ export function GalleryLightbox({ items, initialIndex, onClose }: GalleryLightbo
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.15}
             onDragEnd={handleDragEnd}
-            className="relative h-full w-full max-w-5xl cursor-grab active:cursor-grabbing"
+            onClick={(e) => e.stopPropagation()}
+            className="relative z-10 h-full w-full max-w-5xl cursor-grab active:cursor-grabbing"
           >
             <div className="relative h-full min-h-[50vh] w-full overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold-400/20 sm:min-h-0 sm:rounded-3xl">
               <Image
@@ -144,7 +150,10 @@ export function GalleryLightbox({ items, initialIndex, onClose }: GalleryLightbo
 
         <button
           type="button"
-          onClick={goNext}
+          onClick={(e) => {
+            e.stopPropagation();
+            goNext();
+          }}
           className="absolute end-2 z-20 rounded-full bg-white/10 p-2.5 text-cream-100 backdrop-blur-sm transition-all hover:scale-110 hover:bg-gold-500/30 sm:end-4 sm:p-3"
           aria-label={t.gallery.next}
         >
@@ -152,9 +161,12 @@ export function GalleryLightbox({ items, initialIndex, onClose }: GalleryLightbo
         </button>
       </div>
 
-      {/* Thumbnail strip */}
-      <div className="shrink-0 border-t border-white/10 px-4 py-4">
-        <div className="mx-auto flex max-w-4xl gap-2 overflow-x-auto pb-1 scrollbar-thin">
+      {/* Thumbnail strip — clicks don't close */}
+      <div
+        className="relative z-10 shrink-0 border-t border-white/10 px-4 py-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mx-auto flex max-w-4xl gap-2 overflow-x-auto pb-1">
           {items.map((thumb, i) => (
             <button
               key={thumb.image}
@@ -162,7 +174,7 @@ export function GalleryLightbox({ items, initialIndex, onClose }: GalleryLightbo
               onClick={() => go(i)}
               className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg transition-all sm:h-16 sm:w-24 ${
                 i === index
-                  ? "ring-2 ring-gold-400 ring-offset-2 ring-offset-brown-950 scale-105"
+                  ? "scale-105 ring-2 ring-gold-400 ring-offset-2 ring-offset-brown-950"
                   : "opacity-60 hover:opacity-100"
               }`}
             >

@@ -8,40 +8,70 @@ import { useLanguage } from "@/context/LanguageContext";
 import { GalleryLightbox, GalleryExpandHint } from "./GalleryLightbox";
 
 const SLIDE_INTERVAL = 4500;
+const IDLE_BEFORE_AUTOPLAY_MS = 8000;
 
 export function Gallery() {
   const { t, dir } = useLanguage();
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { margin: "-20%" });
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastMoveRef = useRef(0);
   const items = t.gallery.items;
 
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [paused, setPaused] = useState(false);
+  const [manualPaused, setManualPaused] = useState(false);
+  const [userActive, setUserActive] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const autoPlayAllowed = inView && !lightboxOpen && !manualPaused && !userActive;
+
+  const registerActivity = useCallback(() => {
+    setUserActive(true);
+    setProgress(0);
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      setUserActive(false);
+    }, IDLE_BEFORE_AUTOPLAY_MS);
+  }, []);
+
+  const onMouseMove = useCallback(() => {
+    const now = Date.now();
+    if (now - lastMoveRef.current < 400) return;
+    lastMoveRef.current = now;
+    registerActivity();
+  }, [registerActivity]);
+
+  useEffect(() => {
+    return () => {
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    };
+  }, []);
+
   const goTo = useCallback(
     (index: number) => {
+      registerActivity();
       setDirection(index > active ? 1 : -1);
       setActive((index + items.length) % items.length);
       setProgress(0);
     },
-    [active, items.length],
+    [active, items.length, registerActivity],
   );
 
   const goNext = useCallback(() => goTo(active + 1), [goTo, active]);
   const goPrev = useCallback(() => goTo(active - 1), [goTo, active]);
 
-  // Auto slideshow with progress bar
+  // Auto slideshow only when idle and visible
   useEffect(() => {
-    if (paused || lightboxOpen) return;
+    if (!autoPlayAllowed) return;
 
     const tick = 50;
     const timer = setInterval(() => {
       setProgress((p) => {
         if (p >= 100) {
-          goNext();
+          setDirection(1);
+          setActive((prev) => (prev + 1) % items.length);
           return 0;
         }
         return p + (tick / SLIDE_INTERVAL) * 100;
@@ -49,9 +79,10 @@ export function Gallery() {
     }, tick);
 
     return () => clearInterval(timer);
-  }, [paused, lightboxOpen, goNext, active]);
+  }, [autoPlayAllowed, items.length]);
 
   const openLightbox = (index: number) => {
+    registerActivity();
     setActive(index);
     setProgress(0);
     setLightboxOpen(true);
@@ -79,8 +110,16 @@ export function Gallery() {
   };
 
   return (
-    <section id="gallery" className="section-padding overflow-hidden bg-cream-200/30">
-      <div className="container-site" ref={ref}>
+    <section
+      id="gallery"
+      ref={sectionRef}
+      className="section-padding overflow-hidden bg-cream-200/30"
+      onMouseMove={onMouseMove}
+      onMouseDown={registerActivity}
+      onTouchStart={registerActivity}
+      onFocus={registerActivity}
+    >
+      <div className="container-site">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -94,21 +133,21 @@ export function Gallery() {
           </p>
         </motion.div>
 
-        {/* Main auto-slideshow */}
+        {/* Main slideshow */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.15 }}
           className="relative mx-auto max-w-5xl"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
         >
           <div
             className="group relative aspect-[16/10] cursor-pointer overflow-hidden rounded-3xl shadow-card ring-1 ring-gold-200/50 sm:aspect-[16/9]"
             onClick={() => openLightbox(active)}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => e.key === "Enter" && openLightbox(active)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") openLightbox(active);
+            }}
             aria-label={t.gallery.viewFullscreen}
           >
             <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -124,7 +163,7 @@ export function Gallery() {
               >
                 <motion.div
                   className="relative h-full w-full"
-                  animate={{ scale: [1, 1.06, 1] }}
+                  animate={autoPlayAllowed ? { scale: [1, 1.06, 1] } : { scale: 1 }}
                   transition={{ duration: SLIDE_INTERVAL / 1000, ease: "linear" }}
                 >
                   <Image
@@ -149,7 +188,6 @@ export function Gallery() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Nav arrows */}
             <button
               type="button"
               onClick={(e) => {
@@ -173,17 +211,15 @@ export function Gallery() {
               <ChevronRight className={`h-5 w-5 ${dir === "rtl" ? "rotate-180" : ""}`} />
             </button>
 
-            {/* Progress bar */}
             <div className="absolute inset-x-0 bottom-0 h-1 bg-brown-950/30">
               <motion.div
                 className="h-full bg-gold-gradient"
-                style={{ width: `${progress}%` }}
+                style={{ width: `${autoPlayAllowed ? progress : 0}%` }}
                 transition={{ duration: 0.05 }}
               />
             </div>
           </div>
 
-          {/* Controls row */}
           <div className="mt-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               {items.map((_, i) => (
@@ -200,11 +236,24 @@ export function Gallery() {
             </div>
             <button
               type="button"
-              onClick={() => setPaused((p) => !p)}
+              onClick={() => {
+                if (manualPaused || userActive) {
+                  setManualPaused(false);
+                  setUserActive(false);
+                  if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+                } else {
+                  registerActivity();
+                  setManualPaused(true);
+                }
+              }}
               className="flex items-center gap-1.5 rounded-full border border-gold-300/60 bg-white px-3 py-1.5 text-xs font-medium text-brown-700 transition-colors hover:bg-gold-50 sm:text-sm"
             >
-              {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
-              {paused ? t.gallery.play : t.gallery.pause}
+              {manualPaused || userActive ? (
+                <Play className="h-3.5 w-3.5" />
+              ) : (
+                <Pause className="h-3.5 w-3.5" />
+              )}
+              {manualPaused || userActive ? t.gallery.play : t.gallery.pause}
             </button>
           </div>
         </motion.div>
@@ -254,7 +303,6 @@ export function Gallery() {
         </motion.div>
       </div>
 
-      {/* Fullscreen lightbox */}
       <AnimatePresence>
         {lightboxOpen && (
           <GalleryLightbox
@@ -265,6 +313,7 @@ export function Gallery() {
               setActive(finalIndex);
               setProgress(0);
               setLightboxOpen(false);
+              registerActivity();
             }}
           />
         )}
