@@ -1,34 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Cormorant_Garamond, Inter, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "@/components/JsonLd";
 import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, SITE_NAME, SITE_URL } from "@/lib/seo";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const notoArabic = Noto_Sans_Arabic({
-  subsets: ["arabic"],
-  variable: "--font-noto-arabic",
-  display: "swap",
-});
 
 const description =
   "R Furniture Upholstery Dubai — expert sofa repair, leather upholstery, headboard upholstery, curtains & blinds. Premium fabrics, custom finishes. Call +971 56 769 2414 or email rfurnitureupholstery7@gmail.com";
@@ -127,12 +100,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <JsonLd />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body
-        className={`${playfair.variable} ${cormorant.variable} ${inter.variable} ${notoArabic.variable} font-sans`}
-      >
-        {children}
-      </body>
+      <body className="font-sans">{children}</body>
     </html>
   );
 }

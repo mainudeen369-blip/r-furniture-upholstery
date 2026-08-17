@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --font-playfair: "Playfair Display", Georgia, serif;
+    --font-cormorant: "Cormorant Garamond", Georgia, serif;
+    --font-inter: "Inter", system-ui, sans-serif;
+    --font-noto-arabic: "Noto Sans Arabic", Tahoma, sans-serif;
+  }
+
   html {
     scroll-behavior: smooth;
   }
