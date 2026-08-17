@@ -163,7 +163,22 @@ export const translations = {
         {
           title: "Dubai Premium Upholstery",
           desc: "Home, office, hotel & restaurant furniture — serving all UAE",
-          image: "/images/imgd.jpeg",
+          image: "/images/dubai-upholstery-services-flyer.jpeg",
+        },
+        {
+          title: "Home Sofa Reupholstery",
+          desc: "Before & after sofa, dining chair, headboard & armchair transformations",
+          image: "/images/home-sofa-reupholstery-before-after.jpeg",
+        },
+        {
+          title: "Circular Sofa Transformation",
+          desc: "Complete round sectional reupholstery — from worn fabric to luxury pink finish",
+          image: "/images/circular-sofa-transformation.jpeg",
+        },
+        {
+          title: "Complete Upholstery Solutions",
+          desc: "Sectional, armchair & leather Chesterfield restoration across Dubai & UAE",
+          image: "/images/complete-upholstery-before-after.jpeg",
         },
       ],
     },
@@ -355,7 +370,22 @@ export const translations = {
         {
           title: "تنجيد فاخر في دبي",
           desc: "أثاث المنزل والمكتب والفندق والمطعم — نخدم جميع الإمارات",
-          image: "/images/imgd.jpeg",
+          image: "/images/dubai-upholstery-services-flyer.jpeg",
+        },
+        {
+          title: "إعادة تنجيد أريكة المنزل",
+          desc: "تحولات قبل وبعد للأريكة وكراسي الطعام ولوح الرأس والكرسي",
+          image: "/images/home-sofa-reupholstery-before-after.jpeg",
+        },
+        {
+          title: "تحويل الأريكة الدائرية",
+          desc: "إعادة تنجيد كاملة للأريكة الدائرية — من القماش البالي إلى تشطيب فاخر",
+          image: "/images/circular-sofa-transformation.jpeg",
+        },
+        {
+          title: "حلول التنجيد الشاملة",
+          desc: "ترميم الأريكة والكراسي والجلد في دبي وجميع الإمارات",
+          image: "/images/complete-upholstery-before-after.jpeg",
         },
       ],
     },
